@@ -1,0 +1,27 @@
+server:
+  port: 8085
+
+jwt:
+  secret: "ISRIUk5zUjdQUWI4dmk5TCZjaVhIMlozVGF2Wm1AZnlzI0JUam8jJFl3YVJZdm9zel4"
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/school
+    username: user
+    password: password
+
+  security:
+    user:
+      name: user
+      password: test
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
