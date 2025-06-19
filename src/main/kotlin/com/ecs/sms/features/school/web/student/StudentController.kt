@@ -1,7 +1,9 @@
 package com.ecs.sms.features.school.web.student
 
-import com.ecs.sms.features.school.domain.services.StudentService
-import org.springframework.http.ResponseEntity
+import com.ecs.sms.features.school.services.StudentService
+import com.ecs.sms.features.school.web.student.models.CreateStudentRequest
+import com.ecs.sms.features.school.web.student.models.StudentResponse
+import com.ecs.sms.features.school.web.student.models.toResponse
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -11,29 +13,17 @@ class StudentController(
 ) {
     @PostMapping
     fun create(@RequestBody request: CreateStudentRequest): StudentResponse {
-        val student = studentService.createStudent(
+        return studentService.createStudent(
             fullName = request.fullName,
             email = request.email,
             phone = request.phone,
             crmId = request.crmId
-        )
-        return student.toResponse()
+        ).toResponse()
     }
 
     @GetMapping
-    fun list(): List<StudentResponse> {
-        return studentService.listStudents().map { it.toResponse() }
-    }
+    fun getAll(): List<StudentResponse> = studentService.listStudents().map { it.toResponse() }
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: String): ResponseEntity<StudentResponse> {
-        val student = studentService.getStudent(id) ?: return ResponseEntity.notFound().build()
-        return ResponseEntity.ok(student.toResponse())
-    }
-
-    @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: String): ResponseEntity<Void> {
-        studentService.deleteStudent(id)
-        return ResponseEntity.noContent().build()
-    }
+    fun get(@PathVariable id: String): StudentResponse = studentService.getStudent(id).toResponse()
 }

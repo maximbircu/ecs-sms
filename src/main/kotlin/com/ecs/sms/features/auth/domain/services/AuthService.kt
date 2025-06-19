@@ -1,11 +1,11 @@
 package com.ecs.sms.features.auth.domain.services
 
 import com.ecs.sms.features.auth.domain.RefreshTokenRepository
+import com.ecs.sms.features.auth.domain.UserRepository
 import com.ecs.sms.features.auth.domain.models.RefreshToken
 import com.ecs.sms.features.auth.domain.models.Role
 import com.ecs.sms.features.auth.domain.models.User
 import com.ecs.sms.features.auth.infrastructure.HashEncoder
-import com.ecs.sms.features.auth.infrastructure.repositories.MemoryUserRepository
 import com.ecs.sms.features.profile.data.ProfilesRepository
 import com.ecs.sms.features.profile.domain.Profile
 import org.springframework.security.authentication.BadCredentialsException
@@ -18,7 +18,7 @@ import java.util.*
 class AuthService(
     private val profilesRepository: ProfilesRepository,
     private val tokenService: TokenService,
-    private val userRepository: MemoryUserRepository,
+    private val userRepository: UserRepository,
     private val refreshTokenRepository: RefreshTokenRepository,
     private val hashEncoder: HashEncoder,
 ) {

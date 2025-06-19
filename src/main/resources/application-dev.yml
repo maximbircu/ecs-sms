@@ -7,21 +7,20 @@ jwt:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/school
-    username: user
-    password: password
+    username: admin
+    password: admin
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   security:
     user:
       name: user
       password: test
 
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-
-  flyway:
-    enabled: true

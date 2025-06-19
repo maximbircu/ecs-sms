@@ -1,12 +1,12 @@
 package com.ecs.sms.features.school.domain.models
 
-import java.time.Instant
+import java.util.*
 
 data class Enrollment(
-    val studentId: String,
-    val courseInstanceId: String,
+    val student: Student,
+//    val course: Course,
     val paymentStatus: PaymentStatus,
-    val joinedAt: Instant
+    val id: String = UUID.randomUUID().toString()
 )
 
 enum class PaymentStatus {
