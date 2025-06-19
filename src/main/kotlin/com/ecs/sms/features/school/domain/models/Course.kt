@@ -2,6 +2,7 @@ package com.ecs.sms.features.school.domain.models
 
 import com.ecs.sms.core.domain.EnglishLevel
 import com.ecs.sms.core.domain.TimeRange
+import com.ecs.sms.features.school.domain.models.CourseInstanceStatus.FORMING
 import java.time.DayOfWeek
 import java.time.LocalDate
 import kotlin.time.Duration
@@ -10,13 +11,51 @@ import kotlin.time.Duration.Companion.minutes
 data class CourseInstance(
     val id: String,
     val level: EnglishLevel,
-    val schedule: CourseSchedule,
-    val teacherId: String,
-    val enrolments: List<Enrollment>,
-    val status: CourseInstanceStatus
-)
+    val type: CourseType,
+    val schedule: CourseSchedule? = null,
+    val teacherId: String? = null,
+    val enrolments: List<Enrollment> = emptyList(),
+    val status: CourseInstanceStatus = CourseInstanceStatus.DRAFT
+) {
+    init {
+        require(id.isNotBlank()) { "Student ID cannot be blank" }
+    }
+
+    fun enroll(
+        student: Student,
+        paymentStatus: PaymentStatus
+    ): Enrollment {
+        if (teacherId == null) {
+            throw IllegalStateException("Cannot enroll students before assigning a teacher.")
+        }
+
+        if (schedule == null) {
+            throw IllegalStateException("Cannot enroll students before setting a schedule.")
+        }
+
+        if (status !in listOf(FORMING)) {
+            throw IllegalStateException("Only FORMING courses can accept new enrollments.")
+        }
+
+        if (enrolments.any { it.studentId == student.id }) {
+            throw IllegalStateException("Student is already enrolled.")
+        }
+
+        if (enrolments.size >= type.maxCapacity) {
+            throw IllegalStateException("Course has reached maximum capacity.")
+        }
+
+        return Enrollment(
+            courseInstanceId = id,
+            studentId = student.id,
+            paymentStatus = paymentStatus
+        )
+    }
+
+}
 
 enum class CourseInstanceStatus {
+    DRAFT,       // Not ready for enrolments
     FORMING,     // Gathering students, not started yet
     AWAITING,    // Formed but waiting for start date
     STARTED,     // In progress

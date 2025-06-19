@@ -1,12 +1,9 @@
 package com.ecs.sms.features.school.domain.models
 
-import java.time.Instant
-
 data class Enrollment(
     val studentId: String,
     val courseInstanceId: String,
-    val paymentStatus: PaymentStatus,
-    val joinedAt: Instant
+    val paymentStatus: PaymentStatus
 )
 
 enum class PaymentStatus {
